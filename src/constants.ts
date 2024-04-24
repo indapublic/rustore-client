@@ -5,4 +5,5 @@ export enum Path {
   Purchase = '/public/purchase/',
   SandboxPurchase = '/public/sandbox/purchase/',
   Subscription = '/public/subscription/',
+  Version = '/public/v1/application/',
 }

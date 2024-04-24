@@ -56,13 +56,34 @@ export class RuStoreClient {
     return result.body.is_active;
   }
 
-  private async request<T>(path: string) {
+  public async getVersion(
+    packageName: string,
+    ids: number | undefined = undefined,
+    page = 0,
+    size = 20,
+  ): Promise<void> {
+    const result = await this.request<
+      TBaseResponse<Record<string, any> | undefined>
+    >(`${Path.Version}${packageName}/version`, {
+      ids,
+      page,
+      size,
+    });
+
+    console.log(result);
+  }
+
+  private async request<T>(path: string, params?: any) {
     try {
       const jwe = await this.auth.getJwe();
+      const paramsQuery = params ? new URLSearchParams(params) : null;
 
-      const result = await this.httpClient.get<T>(path, {
-        headers: { 'Public-Token': jwe },
-      });
+      const result = await this.httpClient.get<T>(
+        path + (paramsQuery ? paramsQuery.toString() : ''),
+        {
+          headers: { 'Public-Token': jwe },
+        },
+      );
 
       return result.data;
     } catch (e: any) {
